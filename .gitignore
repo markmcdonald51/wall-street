@@ -1,0 +1,9 @@
+RoRED.cfg
+tmp
+log
+vendor/gems
+db/*.sqlite3
+data.dump
+db/data.yml
+db/sphinx/**/*
+config/development.sphinx.conf

@@ -1,0 +1,62 @@
+FILL THE GAP
+
+ok - so you DO have a point or so it seems - here's the backtest
+results for ftg where you ride past the gap but don't adjust your stop
+- only the -3% stop or sell at 15:55 - i'm surprised - i didn't think
+it would be this good - 12/1 to 5/27 25k 4x reinvest
+
+ftg - 18mil
+ftg and beyond - 92mil
+ftg no adjust stop - 238mil
+
+here is my strategy if anyone would like to verify..
+
+entry
+Bar[Open,D]<=0.985*Bar[Close,D,1] AND Bar[Hour,1]*100+Bar[Minute,1]
+=930
+
+exit
+Bar[Low,1]<=0.97*Bar[Open,D] OR Bar[Hour,1]*100+Bar[Minute,1]=1555
+
+i reran it and same results - for some reason i'm missing two days
+when i backtest.. haven't gone through in detail but i see a row of
+-3% losses - 4, 5, 9 consecutive days of losses in a row - so the
+rewards seem higher if you can stomach the losses but i'm sticking
+with ftgb..
+
+On May 27, 9:45 pm, reli...@gmail.com wrote: 
+
+-------------------------------------------------------------------------------
+
+The rules are as follows,
+
+Buy which ever ETF starts to go up after the open and use a 1.25%
+manual  trailing stop trigger to switch between the two ETF's
+
+Sell the ETF anywhere from .75 %  to  1.25 % trailing stop trigger and
+buy the other ETF but  beware of  1% trailing direction changes...
+many will be  fake..
+
+If the price drops after you buy it , switch to the other ETF
+immediately and hold that position until you hit another 1.25%
+trailing stop or the price starts to drop to the buy price
+again   ....then switch to the other ETF ( this is the hard part and
+requires skill and practice. It can't be automated with any kind of
+trading program , )
+
+Always switch to the other ETF when the price  goes higher and back
+down to the buy again  ...  ( AKA a wash sale )  unless the prices
+does higher than 1.25% and then drops 1.25% , then you sell at a
+profit and switch to the other ETF ( See charts for an example )
+
+End the session if the starting account balance drops lower than 1.5%
+or at the close of the market , which ever comes first .............
+
+You can enter this strategy any time after the market opens.
+
+You can use smaller trailing stops for faster moving price changes and
+its best to use a manual trailing stop..
+
+The goal is to get  " under " the red/green line and then switch to
+the other ETF at a trailing switch  point with a profit as many times
+as you can before the EOD 
