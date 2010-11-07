@@ -3,12 +3,15 @@ module Strategy
   class FillTheGap
     include Strategy
     
-    attr_accessor :stock, :date, :stop_loss_percentage
-      
-    def initialize(symbol, date, stop_loss_percentage = -3.0)
-      @stock = Stock.find_by_symbol(symbol)
-      @date = Chronic.parse(date)
-      @stop_loss_percentage = stop_loss_percentage
+    attr_accessor :stock, :date, :stop_loss_percentage, :quotes, :open_quote,
+      :buy_in_price, :stop_gain_loss_amount, :gain_loss_perc, :notes, :stop_loss
+            
+    def initialize(*args)
+      options = {:symbol =>'fas', :date => 'dec 10, 2009', :stop_loss_percentage => -3}.merge(args.extract_options! )
+      @stock = Stock.find_by_symbol(options[:symbol])
+      @date = Chronic.parse(options[:date])
+      @stop_loss_percentage = options[:stop_loss_percentage]
+      @notes = ''
     end
     
     def fill_the_gap
@@ -28,45 +31,46 @@ module Strategy
       puts "Percent diff: #{@precent_diff}"
      
       if (@stop_loss_percentage < @precent_diff)
-        puts "Sit out on #{stock.symbol}  #{@precent_diff.to_f} >  #{@stop_loss_percentage} "      
+        @notes << "\nSit out on #{stock.symbol}  #{@precent_diff.to_f} >  #{@stop_loss_percentage} \n"      
         return false
       end
 
-      puts "Buying #{stock.label}"
+      @notes << "\nBuying #{stock.label}\n"
       @buy_in_price = @open_quote.ask
       @stop_loss = calc_stop_loss_amount(@buy_in_price, @stop_loss_percentage)
       
       @stop_gain_loss_amount = @buy_in_price * 1.01
       
-      puts "Bought in at: #{@buy_in_price}" 
-      puts "Stop loss: #{@stop_loss}"
-      puts "Must get above #{@stop_gain_loss_amount } for 1% saftey stop"
+      @notes << "Bought in at: #{@buy_in_price}\n" 
+      @notes <<  "Stop loss: #{@stop_loss}\n"
+      @notes <<  "Must get above #{@stop_gain_loss_amount } for 1% safety stop\n"
       
       gain_loss_set = false
       
       @quotes.each do |q|
-        print  "#{q.ask} "
+        @notes <<  "#{q.ask}\n"
         next if q.ask == 0.00
         
         if q.ask <= @stop_loss
-          puts "-----------------"
-          puts "stopped out at #{@stop_loss} at #{q.date}"
-          puts "------------------------------------------------------"
-          puts "------------------- GAIN LOSS -----------------------"
-          puts gain_loss_percentage 
+          @notes <<  "\n-----------------\n"
+          @notes <<  "stopped out at #{@stop_loss} at #{q.date}\n"
+          @notes <<  "------------------------------------------------------\n"
+          @notes <<  "------------------- GAIN LOSS -----------------------\n"
+          @notes <<  gain_loss_percentage.to_s 
+          @gain_loss_perc = gain_loss_percentage
           
           break
         
         elsif ((q.ask >  @stop_gain_loss_amount) && (gain_loss_set != true))
           @stop_loss = @stop_gain_loss_amount.to_f
-          puts "Got above 1% #{@stop_gain_loss_amount}"
+          @notes << "Got above 1% #{@stop_gain_loss_amount}"
           gain_loss_set = true
           
         elsif gain_loss_set == true and greater_than_percent?(q.ask, @stop_loss, 1.1)        
           @stop_loss = calc_stop_loss_amount(q.ask, -1.1)   
-          puts "\n-------------------------------"
-          puts "! ANOTHER 1 Percent: #{q.ask} !"
-          puts "Reseting stoploss to #{@stop_loss}"
+          @notes <<  "\n-------------------------------\n"
+          @notes <<  "! ANOTHER 1 Percent: #{q.ask} !\n"
+          @notes << "Reseting stoploss to #{@stop_loss}\n"
         end  
       end
       

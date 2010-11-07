@@ -1,7 +1,28 @@
-%h1= "ETF: #{@etf.label}  :: Inverse ETF: #{@etf.inverse_etf.label}"
-%h3= "Start Date: #{@start_date}"
-%hr
-
+- if @strategy
+  %h1= "ETF: #{@strategy.stock.label}  :: Inverse ETF: #{@strategy.stock.inverse_etf.label}"
+  %h3= "Start Date: #{@start_date}"
+  %h3= "Starting Amt: #{number_with_precision(@starting_amount)}"
+  %h3= "Current Amt: #{number_with_precision(@current_amount)}"
+  %hr
+  
+  %h3= "STOCK IN PLAY: #{@strategy.stock.label}" 
+  %h3= "Number of shares bought: #{number_with_precision(@number_shares_bought)}"  
+  %h3= "$ Gain/Loss #{number_with_precision(@dollar_gain_loss)}"
+  %h3= "Leverage #{@leverage}x"
+  
+  %table 
+    - [:date, :stop_loss_percentage, :buy_in_price, :stop_gain_loss_amount, :stop_loss, :gain_loss_perc].each do |f|
+      %tr
+        %td= f.to_s.titleize 
+        %td= @strategy.send(f)
+          
+  %pre
+    = text_area_tag :notes, @strategy.notes, :rows=> 20, :cols => 40  
+ 
+- else
+  = render 'form'
+  
+    
 
 
   
