@@ -1,0 +1,21 @@
+.search.center
+  - form_tag(:action => 'compute', :method=>:get, :autocomplete=>"off") do |f|
+    %h3
+      Symbol
+    = text_field_tag :symbol
+   
+    %h3 
+      Starting Amount
+    = text_field_tag :starting_amount
+    
+    %h3 
+      Leverage
+    = text_field_tag :leverage
+    
+    %h3
+      Start Date
+    = text_field_tag :start_date
+    
+    %p
+    = submit_tag 'search'
+    
