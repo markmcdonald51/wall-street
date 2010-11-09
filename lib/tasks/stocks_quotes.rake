@@ -8,6 +8,7 @@ namespace :stock do
       stock = Stock.find_or_create_by_symbol(s)
       stock.quotes << stock.realtime
     end
+    
   end
 end
 
